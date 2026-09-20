@@ -3,6 +3,7 @@ const app = express()
 let pizzas = require("./pizzas.json")
 let boxes = require("./boxes.json")
 let vouchers = require("./vouchers.json")
+let toppings = require("./toppings.json")
 const fs = require('fs');
 const path = require('path');
 
@@ -19,14 +20,87 @@ function getPrideStates(){
   return states
 }
 
+function findPizzaById(id){
+  for(let pizza of pizzas){
+    if(pizza.id === id){
+      return pizza
+    }
+  }
+  return null
+}
+
+function findToppingById(id){
+  for(let topping of toppings){
+    if(topping.id === id){
+      return topping
+    }
+  }
+  return null
+}
+
+function pizzaWithToppingDetails(pizza){
+  let toppingDetails = []
+  for(let toppingId of pizza.toppings){
+    let topping = findToppingById(toppingId)
+    if(topping){
+      toppingDetails.push(topping)
+    }
+  }
+  return {
+    id: pizza.id,
+    name: pizza.name,
+    price: pizza.price,
+    imageURL: pizza.imageURL,
+    fancyImageURL: pizza.fancyImageURL,
+    toppings: toppingDetails
+  }
+}
+
 app.get('/pizza/list', function(req, resp){
   console.log('getting all pizzas')
   resp.send(pizzas)
 })
 
+app.get('/pizza/detail/:id', function(req, resp){
+  console.log('getting an individual pizza')
+  let id = parseInt(req.params.id)
+  if(isNaN(id)){
+    resp.status(400).send('invalid pizza id')
+    return
+  }
+  let pizza = findPizzaById(id)
+  if(!pizza){
+    resp.status(400).send('pizza not found')
+    return
+  }
+  resp.send(pizzaWithToppingDetails(pizza))
+})
+
 app.post('/pizza/new', function(req, resp){
   console.log('adding new pizza', req.body)
   let newPizza = req.body
+
+  if(!newPizza.name || newPizza.price === undefined || !newPizza.imageURL || !newPizza.fancyImageURL){
+    resp.status(400).send('missing required pizza fields')
+    return
+  }
+
+  let price = parseFloat(newPizza.price)
+  if(isNaN(price)){
+    resp.status(400).send('invalid price')
+    return
+  }
+
+  let toppingIds = newPizza.toppings || []
+  let toppingIdInts = []
+  for(let toppingId of toppingIds){
+    let toppingIdInt = parseInt(toppingId)
+    if(!findToppingById(toppingIdInt)){
+      resp.status(400).send('unknown topping id ' + toppingId)
+      return
+    }
+    toppingIdInts.push(toppingIdInt)
+  }
 
   let maxId = 0
   for(let pizza of pizzas){
@@ -35,8 +109,8 @@ app.post('/pizza/new', function(req, resp){
     }
   }
   newPizza.id = maxId + 1
-  newPizza.price = parseFloat(newPizza.price)
-  newPizza.toppings = []
+  newPizza.price = price
+  newPizza.toppings = toppingIdInts
   pizzas.push(newPizza)
 
   if(!app.TESTING){
@@ -60,6 +134,26 @@ app.post('/pizza/remove', function(req, resp){
     fs.writeFileSync('./pizzas.json', JSON.stringify(pizzas))
   }
   resp.send(pizzas)
+})
+
+app.get('/topping/list', function(req, resp){
+  console.log('getting all toppings')
+  resp.send(toppings)
+})
+
+app.get('/topping/detail/:id', function(req, resp){
+  console.log('getting an individual topping')
+  let id = parseInt(req.params.id)
+  if(isNaN(id)){
+    resp.status(400).send('invalid topping id')
+    return
+  }
+  let topping = findToppingById(id)
+  if(!topping){
+    resp.status(400).send('topping not found')
+    return
+  }
+  resp.send(topping)
 })
 
 app.get('/state/list', function(req, resp){
