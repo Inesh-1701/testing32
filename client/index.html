@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="" />
-    <title>Album example · Bootstrap v5.3</title>
+    <title>Dominick's Pizza</title>
     <script src="js/color-modes.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="style.css" rel="stylesheet" />
@@ -134,25 +134,7 @@
       <div class="navbar navbar-dark bg-dark shadow-sm">
         <div class="container">
           <a href="#" class="navbar-brand d-flex align-items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              aria-hidden="true"
-              class="me-2"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"
-              ></path>
-              <circle cx="12" cy="13" r="4"></circle>
-            </svg>
-            <strong>Album</strong>
+            <strong>Dominick's Pizza</strong>
           </a>
           <button
             class="navbar-toggler"
@@ -194,14 +176,12 @@
       <section class="py-5 text-center container">
         <div class="row py-lg-5">
           <div class="col-lg-6 col-md-8 mx-auto">
-            <h1 class="fw-light">Album example</h1>
+            <h1 class="fw-light">Welcome to Dominick's Pizza</h1>
             <p class="lead text-body-secondary">
-              Something short and leading about the collection below—its
-              contents, the creator, etc. Make it short and sweet, but not too
-              short so folks don’t simply skip over it entirely.
+              Quality. Community. Health.
             </p>
             <p>
-              <a href="#" class="btn btn-primary my-2">Main call to action</a>
+              <a href="#" class="btn btn-primary my-2">I feel</a>
               <a href="checkout.html" class="btn btn-secondary my-2">View Cart</a>
             </p>
           </div>
@@ -213,21 +193,71 @@
         </div>
       </div>
     </main>
+
+    <div class="modal fade" id="edit-pizza-modal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-pizza-name">Edit Pizza</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-6">
+                <img id="modal-pizza-image" src="" class="img-fluid rounded" alt="">
+              </div>
+              <div class="col-6">
+                <img id="modal-box-image" src="media/pizzabox.jpeg" class="img-fluid rounded" alt="Pizza box">
+              </div>
+            </div>
+            <p class="mt-3 mb-1"><strong>Price:</strong> $<span id="modal-pizza-price"></span></p>
+            <hr>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="modal-xtra-cheese-check">
+              <label class="form-check-label" for="modal-xtra-cheese-check">
+                Extra cheese
+              </label>
+            </div>
+            <div class="mt-3">
+              <label for="modal-state-select" class="form-label">Your state</label>
+              <select class="form-select" id="modal-state-select">
+                <option value="">Choose...</option>
+              </select>
+            </div>
+            <div class="form-check mt-2">
+              <input class="form-check-input" type="checkbox" id="modal-pride-check">
+              <label class="form-check-label" for="modal-pride-check">
+                Would you like to add a little extra to show support for your state?
+              </label>
+            </div>
+            <div class="mt-3">
+              <label for="modal-note" class="form-label">Note for this order</label>
+              <textarea class="form-control" id="modal-note" rows="2" placeholder="e.g. no onions please"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="modal-add-to-cart-btn" data-bs-dismiss="modal">Add to cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <footer class="text-body-secondary py-5">
       <div class="container">
         <p class="float-end mb-1"><a href="#">Back to top</a></p>
         <p class="mb-1">
-          Album example is &copy; Bootstrap, but please download and customize
-          it for yourself!
+          &copy; 2026 Dominick's Pizza. Built with Bootstrap.
         </p>
         <p class="mb-0">
           New to Bootstrap?
           <a href="https://getbootstrap.com/">Visit the homepage</a> or read our
           <a href="https://getbootstrap.com/docs/5.3/getting-started/introduction/">getting started guide</a>.
         </p>
+        <p class="mb-0"><a href="admin.html">Admin</a></p>
       </div>
     </footer>
     <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="cart.js"></script>
     <script src="index.js"></script>
   </body>
 </html>
