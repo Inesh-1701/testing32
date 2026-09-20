@@ -1,0 +1,8 @@
+[
+  { "id": 1, "name": "Margherita", "price": 8.99, "imageURL": "media/margherita.png", "fancyImageURL": "media/margherita_fancy.webp", "toppings": [1, 8] },
+  { "id": 2, "name": "Pepperoni", "price": 9.99, "imageURL": "media/pepperoni.png", "fancyImageURL": "media/pepperoni_fancy.jpg", "toppings": [1, 2] },
+  { "id": 3, "name": "Hawaiian", "price": 10.49, "imageURL": "media/hawaiian.png", "fancyImageURL": "media/hawaiian_fancy.jpg", "toppings": [1, 9, 10] },
+  { "id": 4, "name": "Meat Feast", "price": 11.99, "imageURL": "media/meatfeast.png", "fancyImageURL": "media/meatfeast_fancy.jpg", "toppings": [1, 2, 7, 12] },
+  { "id": 5, "name": "BBQ Chicken", "price": 11.49, "imageURL": "media/bbq_chicken.png", "fancyImageURL": "media/bbq_chicken_fancy.webp", "toppings": [1, 11, 13, 4] },
+  { "id": 6, "name": "Ranch", "price": 10.99, "imageURL": "media/ranch.png", "fancyImageURL": "media/ranch_fancy.webp", "toppings": [1, 11, 12, 14] }
+]

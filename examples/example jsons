@@ -1,0 +1,223 @@
+example server.test.js:
+
+
+'use strict';
+
+const request = require('supertest');
+
+const app = require('./app');
+// set flag so the app knows not to save new data to file
+app.TESTING = true;
+
+describe('Test the character service', () => {
+    test('GET /character/list succeeds', () => {
+        return request(app)
+	    .get('/character/list')
+	    .expect(200);
+    });
+
+    test('GET /character/list returns JSON', () => {
+        return request(app)
+	    .get('/character/list')
+	    .expect('Content-type', /json/);
+    });
+
+    test('GET /character/search handles missing parameter', () => {
+        return request(app)
+	    .get('/character/search')
+	    .expect(400);
+    });
+
+    test('POST /character/new succeeds', () => {
+        const params = {'name': 'Testy McTestface', 'imageURL': 'Testy'};
+        return request(app)
+        .post('/character/new')
+        .send(params)
+	    .expect(200);
+    });
+
+    test('GET /character/list includes Lightning McQueen', () => {
+        return request(app)
+	    .get('/character/list')
+	    .expect(/McQueen/);
+    });
+
+});
+
+example package.json:
+{
+  "name": "cars",
+  "version": "0.0.1",
+  "description": "Fandom of Hudson et al",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest",
+    "start": "nodemon server.js"
+  },
+  "keywords": [
+    "film",
+    "pixar"
+  ],
+  "author": "COMP1111 massive",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-session": "^2.1.1",
+    "express": "^5.2.1",
+    "nodemon": "^3.1.14"
+  },
+  "devDependencies": {
+    "supertest": "^7.2.2"
+  }
+}
+
+
+example server.js:
+const app = require("./app");
+
+app.listen(8090)
+
+console.log("Server at http://127.0.0.1:8090")
+
+example json for a cars that shows all the cars website:
+[
+  { "name": "Tow Mater", "imageURL": "mater.png", "films": [1, 2, 3] },
+  { "name": "Cruz Ramirez the Hero", "imageURL": "cruz.png", "films": [3] },
+  { "name": "Doc Hudson", "imageURL": "doc.png", "films": [] },
+  { "name": "LightningMcQueen", "imageURL": "mcqueen.png", "films": [] },
+  {"name": "Francesco Bernoulli","imageURL":"Bernoulli.jpg","films":[2]},
+  {"name":"Professor Zundapp","imageURL": "Professor_z_tazed.png","films":[2]},
+  {"name": "Tony Trihull", "imageURL": "Trihull.png", "films": [2]},
+  {"name": "Siddeley", "imageURL": "Siddeley.png", "films": [2]},
+  { "name": "Sally Carrera", "imageURL": "Sally.png", "films": [1, 2, 3] },
+  { "name": "Chick Hicks", "imageURL": "Chick_Hicks.png", "films": [1, 3] },
+  { "name": "Strip Weathers", "imageURL": "Strip_Weathers.png", "films": [1, 3] },
+  { "name": "Luigi", "imageURL": "Luigi.png", "films": [1, 2, 3] },
+  { "name": "Guido", "imageURL": "Guido.png", "films": [1, 2, 3] },
+  { "name": "Ramone", "imageURL": "Ramone.png", "films": [1, 2, 3] },
+  { "name": "Flo", "imageURL": "Flo.png", "films": [1, 2, 3] },
+  { "name": "Sheriff", "imageURL": "Sheriff.png", "films": [1, 2, 3] },
+  { "name": "Fillmore", "imageURL": "Fillmore.png", "films": [1, 2, 3] },
+  { "name": "Sarge", "imageURL": "Sarge.png", "films": [1, 2, 3] },
+  { "name": "Red", "imageURL": "Red.png", "films": [1, 2, 3] },
+  { "name": "Lizzie", "imageURL": "Lizzie.png", "films": [1, 2, 3] },
+  { "name": "Mack", "imageURL": "Mack.png", "films": [1, 2, 3] },
+  { "name": "Jerry Recycled Batteries", "imageURL": "Jerry_recycled_batteries.png", "films": [1] },
+  { "name": "Mia & Tia", "imageURL": "Mia_Tia.png", "films": [1, 2] },
+  { "name": "Darrell Cartrip", "imageURL": "Darrell_cartrip.png", "films": [1, 2, 3] },
+  { "name": "Bob Cutlass", "imageURL": "Bob_Cutlass.png", "films": [1, 3] }
+]
+
+example app.js:
+const express = require('express')
+const cookieSession = require('cookie-session')
+
+const app = express()
+const characters = require("./characters.json")
+const fs = require('fs');
+
+const films = require("./films.json")
+
+
+app.use(express.static('client'));
+
+app.use(express.json());
+
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1', 'key2'],
+
+  // Cookie Options
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}))
+
+
+app.get('/views', function(req, resp){
+    // Update views
+  req.session.views = (req.session.views || 0) + 1
+
+
+  console.log('requested home page')
+  resp.send('Hello from Radiator Springs. Visit number ' + req.session.views)
+    // Write response
+//  res.end(req.session.views + ' views')
+})
+
+app.get('/character/detail/:num', function(req,resp){
+    console.log("getting an individual character")
+
+    let num = parseInt(req.params.num)
+    let char = characters[num]
+    resp.send(char)
+})
+
+
+app.get('/character/list', function(req,resp){
+  console.log('getting all cars characters')
+  console.log(characters)
+  resp.send(characters)
+})
+
+app.get('/character/search', function(req,resp){
+  console.log("searching for lambs")
+  let search_term = req.query.search_term
+  if(!search_term){
+    resp.status(400).send('no search term specified')
+    return
+  }
+  let results = characters.filter(item => item.name.toLowerCase().includes(search_term.toLowerCase()))
+  resp.send(results)
+})
+
+
+app.post("/character/new", function(req, resp){
+    console.log("request body", req.body);
+    let new_char = req.body;
+    new_char.films = [];
+    characters.push(req.body);
+    console.log("New characters")
+    console.log(characters)
+    if(!app.TESTING){
+      fs.writeFileSync('./characters.json', JSON.stringify(characters));
+    }
+    resp.send(characters);
+});
+
+app.get('/film/list', function(req, resp){
+  resp.send(films)
+})
+
+app.get('/film/detail/:id', function(req, resp){
+  let id = req.params.id
+  console.log("getting an individual film " + id)
+
+
+    let film = films.find(f => f.id == id)
+    resp.send(film)
+})
+
+app.get('/random/:max', function(req, resp){
+  let max = parseInt(req.params.max)
+  let rand = Math.floor(Math.random()*max) +1
+  console.log('Max via url is ' + max + ' rand is ' + rand)
+  resp.send('' + rand)
+})
+
+app.get('/r', function(req, resp){
+  max = parseInt(req.query.max)
+  rand = Math.floor(Math.random()*max) +1
+  console.log('Max via query is ' + max + ' rand is ' + rand)
+  resp.send('' + rand)
+})
+
+module.exports = app;
+
+example films.json:
+[  
+    {"id": "1", "name": "Cars", "year": 2006, "synopsis": "Set in a world populated entirely by anthropomorphic vehicles, the film follows a young self-obsessed racecar named Lightning McQueen who, on the way to the most important race of his life, becomes stranded in a forgotten town along U.S. Route 66 called Radiator Springs, where he learns about friendship and begins to reevaluate his priorities.", "img": "cars_1_film_image.png"},
+    {"id": "2", "name": "Cars 2", "year": 2011, "synopsis": "Lightning McQueen and his best friend Tow Mater head to Japan and Europe to compete in the World Grand Prix, but Mater suddenly gets involved with international espionage and discovers a plot to sabotage the World Grand Prix and its competitors.", "imageURL": "cars2.png"},
+    {"id": "3", "name": "Cars 3", "year": 2017, "synopsis": "veteran racer Lightning McQueen struggles to compete with a new generation of high-tech racers and trains with young technician Cruz Ramirez to prove he still belongs on the track"}
+  ]
+  
+  
+  
+ 
