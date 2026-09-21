@@ -17,7 +17,7 @@ function displayPizzas(pizzaList){
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" class="btn btn-sm btn-outline-secondary view-btn" data-pizza-id="${pizza.id}">View</button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary edit-btn" data-pizza-id="${pizza.id}">Edit</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary edit-btn" data-pizza-id="${pizza.id}">Add to Cart</button>
                     </div>
                   </div>
                 </div>
@@ -110,7 +110,7 @@ function calculateModalPrice(){
       priceAdjustment -= 1
     }
   }
-  return currentPizza.price + priceAdjustment
+  return clampPrice(currentPizza.price + priceAdjustment)
 }
 
 function updateModalPrice(){
@@ -204,11 +204,25 @@ function setFulfillmentType(fulfillmentType, label){
 function applyStoredFulfillmentType(){
   let fulfillmentType = localStorage.getItem('fulfillmentType')
   if(fulfillmentType === 'pickup'){
-    document.getElementById('fulfillment-btn').textContent = 'to collect it myself'
+    document.getElementById('fulfillment-btn').textContent = 'To Collect'
   }
   else{
-    document.getElementById('fulfillment-btn').textContent = 'it delivered'
+    document.getElementById('fulfillment-btn').textContent = 'It Delivered'
   }
+}
+
+async function displayAvailableCoupons(){
+  let textElement = document.getElementById('voucher-list-text')
+  if(!textElement){
+    return;
+  }
+  let response = await fetch('/voucher/list')
+  let vouchers = await response.json()
+  let couponText = "Available coupons: "
+  for(let voucher of vouchers){
+    couponText += voucher.code + ", "
+  }
+  textElement.textContent = couponText.slice(0, -2)
 }
 
 window.addEventListener("DOMContentLoaded", async function(event){
@@ -222,6 +236,8 @@ window.addEventListener("DOMContentLoaded", async function(event){
 
   let toppingResponse = await fetch('/topping/list')
   toppingList = await toppingResponse.json()
+
+  displayAvailableCoupons()
 
   let row = document.getElementById('pizza-row')
   row.addEventListener('click', function(event){
