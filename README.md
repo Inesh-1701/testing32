@@ -1,3 +1,7 @@
+🔗 **[Live Demo](https://your-app.onrender.com)**
+
+*Note: hosted on a free tier that spins down when idle — first load may take 30–60 seconds.*
+
 # Bonu assai!
 
 A dynamic pizza ordering website. Static HTML/CSS/JS pages load pizza and topping
