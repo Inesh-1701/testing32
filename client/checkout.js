@@ -53,45 +53,24 @@ function applyFulfillmentMode(){
   if(!deliveryFields){
     return;
   }
-  let paymentMethodFields = document.getElementById('payment-method-fields')
-  let pickupFields = document.getElementById('pickup-fields')
-  let addressInput = document.getElementById('address')
-  let countrySelect = document.getElementById('country')
-  let stateSelect = document.getElementById('state')
-  let zipInput = document.getElementById('zip')
-  let pickupStoreSelect = document.getElementById('pickup-store')
-  let creditRadio = document.getElementById('credit')
-  let debitRadio = document.getElementById('debit')
-  let paypalRadio = document.getElementById('paypal')
+  let isPickup = localStorage.getItem('fulfillmentType') === 'pickup'
 
-  let fulfillmentType = localStorage.getItem('fulfillmentType')
-
-  if(fulfillmentType === 'pickup'){
+  if(isPickup){
     deliveryFields.classList.add('d-none')
-    paymentMethodFields.classList.add('d-none')
-    pickupFields.classList.remove('d-none')
-    addressInput.required = false
-    countrySelect.required = false
-    stateSelect.required = false
-    zipInput.required = false
-    creditRadio.required = false
-    debitRadio.required = false
-    paypalRadio.required = false
-    pickupStoreSelect.required = true
+    document.getElementById('payment-method-fields').classList.add('d-none')
+    document.getElementById('pickup-fields').classList.remove('d-none')
   }
   else{
     deliveryFields.classList.remove('d-none')
-    paymentMethodFields.classList.remove('d-none')
-    pickupFields.classList.add('d-none')
-    addressInput.required = true
-    countrySelect.required = true
-    stateSelect.required = true
-    zipInput.required = true
-    creditRadio.required = true
-    debitRadio.required = true
-    paypalRadio.required = true
-    pickupStoreSelect.required = false
+    document.getElementById('payment-method-fields').classList.remove('d-none')
+    document.getElementById('pickup-fields').classList.add('d-none')
   }
+
+  let deliveryOnlyIds = ['address', 'country', 'state', 'zip', 'credit', 'debit', 'paypal']
+  for(let id of deliveryOnlyIds){
+    document.getElementById(id).required = !isPickup
+  }
+  document.getElementById('pickup-store').required = isPickup
 }
 
 populatePickupStores()

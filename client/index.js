@@ -169,27 +169,12 @@ function updateFooterLogo(){
   }
 }
 
-function checkAdminLogin(){
-  let adminLinkContainer = document.getElementById('admin-link-container')
-  if(!adminLinkContainer){
-    return;
-  }
-  if(localStorage.getItem('isAdmin') === 'true'){
-    adminLinkContainer.classList.remove('d-none')
-  }
-}
-
 function attemptAdminLogin(){
   let username = document.getElementById('admin-username').value
   let password = document.getElementById('admin-password').value
 
   if(username === '1' && password === '1'){
-    localStorage.setItem('isAdmin', 'true')
-    checkAdminLogin()
-    let modal = bootstrap.Modal.getInstance(document.getElementById('admin-login-modal'))
-    if(modal){
-      modal.hide()
-    }
+    window.location.href = 'admin.html'
   }
   else{
     alert('Incorrect username or password')
@@ -276,8 +261,12 @@ window.addEventListener("DOMContentLoaded", async function(event){
     })
   }
 
-  checkAdminLogin()
   document.getElementById('admin-login-btn').addEventListener('click', attemptAdminLogin)
+  document.getElementById('admin-link').addEventListener('click', function(event){
+    event.preventDefault()
+    let modal = new bootstrap.Modal(document.getElementById('admin-login-modal'))
+    modal.show()
+  })
 
   updateFooterLogo()
   let themeButtons = document.querySelectorAll('[data-bs-theme-value]')
