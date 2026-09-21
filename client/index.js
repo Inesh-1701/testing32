@@ -85,6 +85,78 @@ function openEditModal(pizza){
   modal.show()
 }
 
+function displayChefs(stateList){
+  let row = document.getElementById('chef-row')
+  if(!row){
+    return;
+  }
+  row.innerHTML = ""
+
+  let universities = ['University of Palermo', 'University of Catania', 'University of Messina', 'Kore University of Enna']
+  let sicilyPlaces = ['the beaches of Taormina', 'the markets of Palermo', 'the streets of Catania', 'the cliffs of Cefalù', 'the vineyards near Trapani', 'the harbor of Syracuse']
+  let chefPhotos = ['media/chef1.jpg', 'media/chef2.jpg', 'media/chef3.jpeg']
+
+  let i = 0
+  for(let state of stateList){
+    let university = universities[i % universities.length]
+    let place = sicilyPlaces[i % sicilyPlaces.length]
+    let photo = chefPhotos[i % chefPhotos.length]
+    let chefString = `
+        <div class="col">
+            <div class="card shadow-sm">
+                <img src="${photo}" class="card-img-top" alt="Chef of ${state.state}">
+                <div class="card-body">
+                  <h5 class="card-title">Chef of ${state.state}</h5>
+                  <p class="card-text">Trained at ${university}, this chef's heart belongs to ${place} back in Sicily.</p>
+                </div>
+              </div>
+          </div>`
+    row.innerHTML += chefString
+    i = i + 1
+  }
+}
+
+function updateFooterLogo(){
+  let logo = document.getElementById('footer-logo')
+  if(!logo){
+    return;
+  }
+  let theme = document.documentElement.getAttribute('data-bs-theme')
+  if(theme === 'dark'){
+    logo.src = 'media/logo_Dark.png'
+  }
+  else{
+    logo.src = 'media/logo_Light.png'
+  }
+}
+
+function checkAdminLogin(){
+  let adminLinkContainer = document.getElementById('admin-link-container')
+  if(!adminLinkContainer){
+    return;
+  }
+  if(localStorage.getItem('isAdmin') === 'true'){
+    adminLinkContainer.classList.remove('d-none')
+  }
+}
+
+function attemptAdminLogin(){
+  let username = document.getElementById('admin-username').value
+  let password = document.getElementById('admin-password').value
+
+  if(username === '1' && password === '1'){
+    localStorage.setItem('isAdmin', 'true')
+    checkAdminLogin()
+    let modal = bootstrap.Modal.getInstance(document.getElementById('admin-login-modal'))
+    if(modal){
+      modal.hide()
+    }
+  }
+  else{
+    alert('Incorrect username or password')
+  }
+}
+
 function addCurrentPizzaToCart(){
   if(!currentPizza){
     return;
@@ -108,6 +180,7 @@ window.addEventListener("DOMContentLoaded", async function(event){
   let stateResponse = await fetch('/state/list')
   stateList = await stateResponse.json()
   populateStateSelect()
+  displayChefs(stateList)
 
   let row = document.getElementById('pizza-row')
   row.addEventListener('click', function(event){
@@ -125,4 +198,13 @@ window.addEventListener("DOMContentLoaded", async function(event){
   document.getElementById('modal-pride-check').addEventListener('change', updateModalBoxImage)
   document.getElementById('modal-state-select').addEventListener('change', updateModalBoxImage)
   document.getElementById('modal-add-to-cart-btn').addEventListener('click', addCurrentPizzaToCart)
+
+  checkAdminLogin()
+  document.getElementById('admin-login-btn').addEventListener('click', attemptAdminLogin)
+
+  updateFooterLogo()
+  let themeButtons = document.querySelectorAll('[data-bs-theme-value]')
+  for(let button of themeButtons){
+    button.addEventListener('click', updateFooterLogo)
+  }
 })

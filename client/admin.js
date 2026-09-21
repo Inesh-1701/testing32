@@ -104,6 +104,18 @@ window.addEventListener("DOMContentLoaded", async function(event){
     }
   })
 
+  let saveChangesBtn = document.getElementById('save-changes-btn')
+  saveChangesBtn.addEventListener('click', function(event){
+    saveChangesBtn.classList.remove('btn-primary')
+    saveChangesBtn.classList.add('btn-success')
+    saveChangesBtn.textContent = 'Saved!'
+    setTimeout(function(){
+      saveChangesBtn.classList.remove('btn-success')
+      saveChangesBtn.classList.add('btn-primary')
+      saveChangesBtn.textContent = 'Save changes'
+    }, 2000)
+  })
+
   let newStateForm = document.getElementById('new-state-form')
   newStateForm.addEventListener('submit', async function(event){
     event.preventDefault()

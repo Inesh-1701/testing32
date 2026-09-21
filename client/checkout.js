@@ -1,8 +1,12 @@
 function validateForm(form){
   form.addEventListener('submit', function(event){
+    event.preventDefault()
     if(!form.checkValidity()){
-      event.preventDefault()
       event.stopPropagation()
+    }
+    else{
+      let modal = new bootstrap.Modal(document.getElementById('order-received-modal'))
+      modal.show()
     }
     form.classList.add('was-validated')
   })

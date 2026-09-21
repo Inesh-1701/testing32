@@ -4,7 +4,6 @@ let pizzas = require("./pizzas.json")
 let boxes = require("./boxes.json")
 let vouchers = require("./vouchers.json")
 let toppings = require("./toppings.json")
-const fs = require('fs');
 const path = require('path');
 
 app.use(express.static(path.join(__dirname, '..', 'client')));
@@ -113,9 +112,7 @@ app.post('/pizza/new', function(req, resp){
   newPizza.toppings = toppingIdInts
   pizzas.push(newPizza)
 
-  if(!app.TESTING){
-    fs.writeFileSync('./pizzas.json', JSON.stringify(pizzas))
-  }
+  // kept in memory only, so the seed pizzas.json file is never overwritten
   resp.send(pizzas)
 })
 
@@ -130,9 +127,7 @@ app.post('/pizza/remove', function(req, resp){
   }
   pizzas = remainingPizzas
 
-  if(!app.TESTING){
-    fs.writeFileSync('./pizzas.json', JSON.stringify(pizzas))
-  }
+  // kept in memory only, so the seed pizzas.json file is never overwritten
   resp.send(pizzas)
 })
 
@@ -183,9 +178,7 @@ app.post('/state/new', function(req, resp){
   newState.extraCheese = true
   boxes.push(newState)
 
-  if(!app.TESTING){
-    fs.writeFileSync('./boxes.json', JSON.stringify(boxes))
-  }
+  // kept in memory only, so the seed boxes.json file is never overwritten
   resp.send(getPrideStates())
 })
 
@@ -200,9 +193,7 @@ app.post('/state/remove', function(req, resp){
   }
   boxes = remainingBoxes
 
-  if(!app.TESTING){
-    fs.writeFileSync('./boxes.json', JSON.stringify(boxes))
-  }
+  // kept in memory only, so the seed boxes.json file is never overwritten
   resp.send(getPrideStates())
 })
 

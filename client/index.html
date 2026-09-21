@@ -4,13 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="" />
-    <title>Dominick's Pizza</title>
+    <title>Bonu assai! Pizza</title>
     <script src="js/color-modes.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="style.css" rel="stylesheet" />
     <meta name="theme-color" content="#712cf9" />
   </head>
   <body>
+    <div class="text-center small py-1">
+      <a href="#" data-bs-toggle="modal" data-bs-target="#admin-login-modal">Are you an admin?</a>
+    </div>
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
       <symbol id="check2" viewBox="0 0 16 16">
         <path
@@ -114,7 +117,7 @@
             <div class="col-sm-8 col-md-7 py-4">
               <h4>About</h4>
               <p class="text-body-secondary">
-                At Dominick's, we guarantee quality ingredients for quality pizza. 
+                At Bonu assai!, we guarantee quality ingredients for quality pizza.
                 That is why, we offer a unique pizza for each state to show your love and support for your state.  
               </p>
             </div>
@@ -134,7 +137,7 @@
       <div class="navbar navbar-dark bg-dark shadow-sm">
         <div class="container">
           <a href="#" class="navbar-brand d-flex align-items-center">
-            <strong>Dominick's Pizza</strong>
+            <img id="site-logo" src="media/logo_Dark.png" alt="Bonu assai!" height="32">
           </a>
           <button
             class="navbar-toggler"
@@ -176,9 +179,9 @@
       <section class="py-5 text-center container">
         <div class="row py-lg-5">
           <div class="col-lg-6 col-md-8 mx-auto">
-            <h1 class="fw-light">Welcome to Dominick's Pizza</h1>
+            <h1 class="fw-light">Welcome to Bonu assai! Pizza</h1>
             <p class="lead text-body-secondary">
-              Quality. Community. Health.
+              La felicità si pò manciari!
             </p>
             <p>
               <a href="#" class="btn btn-primary my-2">I feel</a>
@@ -190,6 +193,14 @@
       <div class="album py-5 bg-body-tertiary">
         <div class="container">
           <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="pizza-row"></div>
+        </div>
+      </div>
+      <div class="py-5">
+        <div class="container">
+          <div class="text-center mb-4">
+            <h2 class="fw-light">Sicilian Techniques, Sicilian Chefs, A Sicilian World!</h2>
+          </div>
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="chef-row"></div>
         </div>
       </div>
     </main>
@@ -242,18 +253,44 @@
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="admin-login-modal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Admin login</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="admin-username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="admin-username">
+            </div>
+            <div class="mb-3">
+              <label for="admin-password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="admin-password">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="admin-login-btn">Log in</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <footer class="text-body-secondary py-5">
       <div class="container">
         <p class="float-end mb-1"><a href="#">Back to top</a></p>
+        <img id="footer-logo" src="media/logo_Light.png" alt="Bonu assai!" height="24">
         <p class="mb-1">
-          &copy; 2026 Dominick's Pizza. Built with Bootstrap.
+          &copy; 2026 Bonu assai! Pizza.
         </p>
         <p class="mb-0">
-          New to Bootstrap?
-          <a href="https://getbootstrap.com/">Visit the homepage</a> or read our
-          <a href="https://getbootstrap.com/docs/5.3/getting-started/introduction/">getting started guide</a>.
+          Let us know if you have any allergies!
+          <a href="https://gfco.org">We comply with industry standards for gluten</a> and
+          <a href="https://www.asifood.com/certified-free-from-certification">nut-free products</a>.
         </p>
-        <p class="mb-0"><a href="admin.html">Admin</a></p>
+        <p class="mb-0 d-none" id="admin-link-container"><a href="admin.html">Learn more on how to customize the website</a></p>
       </div>
     </footer>
     <script src="js/bootstrap.bundle.min.js"></script>

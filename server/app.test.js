@@ -3,8 +3,6 @@
 const request = require('supertest');
 
 const app = require('./app');
-// set flag so the app knows not to save new data to file
-app.TESTING = true;
 
 describe('GET /pizza/list', () => {
   test('GET /pizza/list succeeds', () => {
