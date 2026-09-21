@@ -59,7 +59,7 @@ function updateModalBoxImage(){
     for(let state of stateList){
       if(state.state === selectedState){
         boxImage = state.imageURL
-        boxLabel = state.name
+        boxLabel = state.state + ' Pride Box'
       }
     }
   }

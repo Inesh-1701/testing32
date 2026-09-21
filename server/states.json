@@ -1,0 +1,5 @@
+[
+  { "id": 1, "state": "Alaska", "imageURL": "media/pizzabox_pride_alaska.jpeg" },
+  { "id": 2, "state": "Maine", "imageURL": "media/pizzabox_pride_maine.jpeg" },
+  { "id": 3, "state": "Montana", "imageURL": "media/pizzabox_pride_montana.jpeg" }
+]

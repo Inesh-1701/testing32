@@ -1,8 +1,7 @@
-[
-  { "id": 1, "tier": "base", "name": "Regular Box", "imageURL": "media/pizzabox.jpeg", "extraCheese": false },
-  { "id": 2, "tier": "xtracheese", "name": "Xtra Cheese Box", "imageURL": "media/pizzabox_xtracheese.jpeg", "extraCheese": true },
-  { "id": 3, "tier": "pride", "name": "Alaska Pride Box", "state": "Alaska", "imageURL": "media/pizzabox_pride_alaska.jpeg", "extraCheese": true },
-  { "id": 4, "tier": "pride", "name": "Maine Pride Box", "state": "Maine", "imageURL": "media/pizzabox_pride_maine.jpeg", "extraCheese": true },
-  { "id": 5, "tier": "pride", "name": "Montana Pride Box", "state": "Montana", "imageURL": "media/pizzabox_pride_montana.jpeg", "extraCheese": true },
-  { "id": 6, "tier": "pride", "name": "Pride Box", "state": "default", "imageURL": "media/pizzabox_pride_default.jpeg", "extraCheese": true }
-]
+[{"id":1,"tier":"base","name":"Regular Box","imageURL":"media/pizzabox.jpeg","extraCheese":false},
+{"id":2,"tier":"xtracheese","name":"Xtra Cheese Box","imageURL":"media/pizzabox_xtracheese.jpeg","extraCheese":true},
+{"id":3,"tier":"pride","name":"Alaska Pride Box","state":"Alaska","imageURL":"media/pizzabox_pride_alaska.jpeg","extraCheese":true},
+{"id":4,"tier":"pride","name":"Maine Pride Box","state":"Maine","imageURL":"media/pizzabox_pride_maine.jpeg","extraCheese":true}
+{"id":5,"tier":"pride","name":"Montana Pride Box","state":"Montana","imageURL":"media/pizzabox_pride_montana.jpeg","extraCheese":true},
+{"id":6,"tier":"pride","name":"Pride Box","state":"default","imageURL":"media/pizzabox_pride_default.jpeg","extraCheese":true}]
+

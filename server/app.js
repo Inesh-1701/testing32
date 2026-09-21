@@ -1,23 +1,13 @@
 const express = require('express')
 const app = express()
 let pizzas = require("./pizzas.json")
-let boxes = require("./boxes.json")
+let states = require("./states.json")
 let vouchers = require("./vouchers.json")
 let toppings = require("./toppings.json")
 const path = require('path');
 
 app.use(express.static(path.join(__dirname, '..', 'client')));
 app.use(express.json());
-
-function getPrideStates(){
-  let states = []
-  for(let box of boxes){
-    if(box.tier === 'pride' && box.state !== 'default'){
-      states.push(box)
-    }
-  }
-  return states
-}
 
 function findPizzaById(id){
   for(let pizza of pizzas){
@@ -153,7 +143,7 @@ app.get('/topping/detail/:id', function(req, resp){
 
 app.get('/state/list', function(req, resp){
   console.log('getting all states')
-  resp.send(getPrideStates())
+  resp.send(states)
 })
 
 app.get('/voucher/list', function(req, resp){
@@ -166,35 +156,31 @@ app.post('/state/new', function(req, resp){
   let newState = req.body
 
   let maxId = 0
-  for(let box of boxes){
-    if(box.id > maxId){
-      maxId = box.id
+  for(let state of states){
+    if(state.id > maxId){
+      maxId = state.id
     }
   }
   newState.id = maxId + 1
-  newState.tier = 'pride'
-  newState.state = req.body.name
-  newState.name = `${req.body.name} Pride Box`
-  newState.extraCheese = true
-  boxes.push(newState)
+  states.push(newState)
 
-  // kept in memory only, so the seed boxes.json file is never overwritten
-  resp.send(getPrideStates())
+  // kept in memory only, so the seed states.json file is never overwritten
+  resp.send(states)
 })
 
 app.post('/state/remove', function(req, resp){
   console.log('removing state', req.body)
   let id = req.body.id
-  let remainingBoxes = []
-  for(let box of boxes){
-    if(box.id !== id){
-      remainingBoxes.push(box)
+  let remainingStates = []
+  for(let state of states){
+    if(state.id !== id){
+      remainingStates.push(state)
     }
   }
-  boxes = remainingBoxes
+  states = remainingStates
 
-  // kept in memory only, so the seed boxes.json file is never overwritten
-  resp.send(getPrideStates())
+  // kept in memory only, so the seed states.json file is never overwritten
+  resp.send(states)
 })
 
 module.exports = app;
