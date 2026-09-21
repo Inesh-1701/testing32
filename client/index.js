@@ -3,6 +3,7 @@ function displayPizzas(pizzaList){
   if(!row){
     return;
   }
+  let cardDescription = document.getElementById('pizza-card-description').innerHTML
   row.innerHTML = ""
   for(let pizza of pizzaList){
     let pizzaString = `
@@ -12,9 +13,10 @@ function displayPizzas(pizzaList){
                 <div class="card-body">
                   <h5 class="card-title">${pizza.name}</h5>
                   <p class="card-text">$${pizza.price.toFixed(2)}</p>
+                  <p class="card-text text-body-secondary fst-italic">${cardDescription}</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary view-btn" data-pizza-id="${pizza.id}">View</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary edit-btn" data-pizza-id="${pizza.id}">Edit</button>
                     </div>
                   </div>
@@ -85,35 +87,24 @@ function openEditModal(pizza){
   modal.show()
 }
 
-function displayChefs(stateList){
-  let row = document.getElementById('chef-row')
-  if(!row){
-    return;
-  }
-  row.innerHTML = ""
+async function openViewModal(pizza){
+  document.getElementById('view-pizza-name').textContent = pizza.name
+  document.getElementById('view-pizza-image').src = pizza.fancyImageURL
+  document.getElementById('view-pizza-image').alt = pizza.name
 
-  let universities = ['University of Palermo', 'University of Catania', 'University of Messina', 'Kore University of Enna']
-  let sicilyPlaces = ['the beaches of Taormina', 'the markets of Palermo', 'the streets of Catania', 'the cliffs of Cefalù', 'the vineyards near Trapani', 'the harbor of Syracuse']
-  let chefPhotos = ['media/chef1.jpg', 'media/chef2.jpg', 'media/chef3.jpeg']
+  let response = await fetch('/pizza/detail/' + pizza.id)
+  let pizzaDetail = await response.json()
 
-  let i = 0
-  for(let state of stateList){
-    let university = universities[i % universities.length]
-    let place = sicilyPlaces[i % sicilyPlaces.length]
-    let photo = chefPhotos[i % chefPhotos.length]
-    let chefString = `
-        <div class="col">
-            <div class="card shadow-sm">
-                <img src="${photo}" class="card-img-top" alt="Chef of ${state.state}">
-                <div class="card-body">
-                  <h5 class="card-title">Chef of ${state.state}</h5>
-                  <p class="card-text">Trained at ${university}, this chef's heart belongs to ${place} back in Sicily.</p>
-                </div>
-              </div>
-          </div>`
-    row.innerHTML += chefString
-    i = i + 1
+  let toppingsList = document.getElementById('view-pizza-toppings')
+  toppingsList.innerHTML = ""
+  for(let topping of pizzaDetail.toppings){
+    let item = document.createElement('li')
+    item.textContent = topping.name
+    toppingsList.appendChild(item)
   }
+
+  let modal = new bootstrap.Modal(document.getElementById('view-pizza-modal'))
+  modal.show()
 }
 
 function updateFooterLogo(){
@@ -180,7 +171,6 @@ window.addEventListener("DOMContentLoaded", async function(event){
   let stateResponse = await fetch('/state/list')
   stateList = await stateResponse.json()
   populateStateSelect()
-  displayChefs(stateList)
 
   let row = document.getElementById('pizza-row')
   row.addEventListener('click', function(event){
@@ -189,6 +179,14 @@ window.addEventListener("DOMContentLoaded", async function(event){
       for(let pizza of pizzaList){
         if(pizza.id === pizzaId){
           openEditModal(pizza)
+        }
+      }
+    }
+    if(event.target.classList.contains('view-btn')){
+      let pizzaId = parseInt(event.target.dataset.pizzaId)
+      for(let pizza of pizzaList){
+        if(pizza.id === pizzaId){
+          openViewModal(pizza)
         }
       }
     }

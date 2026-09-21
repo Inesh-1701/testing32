@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="" />
-    <title>Bonu assai! Pizza</title>
+    <title>Bonu assai!</title>
     <script src="js/color-modes.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="style.css" rel="stylesheet" />
@@ -137,7 +137,7 @@
       <div class="navbar navbar-dark bg-dark shadow-sm">
         <div class="container">
           <a href="#" class="navbar-brand d-flex align-items-center">
-            <img id="site-logo" src="media/logo_Dark.png" alt="Bonu assai!" height="32">
+            <img id="site-logo" src="media/logo_Dark.png" alt="Bonu assai!" height="55">
           </a>
           <button
             class="navbar-toggler"
@@ -179,7 +179,7 @@
       <section class="py-5 text-center container">
         <div class="row py-lg-5">
           <div class="col-lg-6 col-md-8 mx-auto">
-            <h1 class="fw-light">Welcome to Bonu assai! Pizza</h1>
+            <h1 class="fw-light">Welcome to Bonu assai!</h1>
             <p class="lead text-body-secondary">
               La felicità si pò manciari!
             </p>
@@ -190,6 +190,10 @@
           </div>
         </div>
       </section>
+      <!-- Edit this description freely - it's shown under every pizza card on the menu -->
+      <p id="pizza-card-description" class="d-none">
+        Straight from our wood-fired oven, with a golden crust and cheese so gooey it practically begs to be devoured.
+      </p>
       <div class="album py-5 bg-body-tertiary">
         <div class="container">
           <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="pizza-row"></div>
@@ -200,7 +204,35 @@
           <div class="text-center mb-4">
             <h2 class="fw-light">Sicilian Techniques, Sicilian Chefs, A Sicilian World!</h2>
           </div>
-          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="chef-row"></div>
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <div class="col">
+              <div class="card shadow-sm">
+                <img src="media/chef1.jpg" class="card-img-top" alt="Chef of Alaska">
+                <div class="card-body">
+                  <h5 class="card-title">Chef of Alaska</h5>
+                  <p class="card-text">Trained at the University of Palermo, this chef's heart belongs to the beaches of Taormina back in Sicily.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card shadow-sm">
+                <img src="media/chef2.jpg" class="card-img-top" alt="Chef of Maine">
+                <div class="card-body">
+                  <h5 class="card-title">Chef of Maine</h5>
+                  <p class="card-text">Trained at the University of Catania, this chef's heart belongs to the markets of Palermo back in Sicily.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card shadow-sm">
+                <img src="media/chef3.jpeg" class="card-img-top" alt="Chef of Montana">
+                <div class="card-body">
+                  <h5 class="card-title">Chef of Montana</h5>
+                  <p class="card-text">Trained at the University of Messina, this chef's heart belongs to the streets of Catania back in Sicily.</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </main>
@@ -254,6 +286,29 @@
       </div>
     </div>
 
+    <div class="modal fade" id="view-pizza-modal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="view-pizza-name">Pizza</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <img id="view-pizza-image" src="" class="img-fluid rounded mb-3" alt="">
+            <!-- Edit this description freely - it's shown for every pizza in this modal -->
+            <p>
+              Picture a crust baked to a perfect golden crunch, blanketed in melted cheese that stretches with every slice, and toppings so fresh and fragrant you can almost taste them just by looking. This is comfort food at its finest, worth every last crumb.
+            </p>
+            <h6>Toppings</h6>
+            <ul id="view-pizza-toppings"></ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="modal fade" id="admin-login-modal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -281,9 +336,9 @@
     <footer class="text-body-secondary py-5">
       <div class="container">
         <p class="float-end mb-1"><a href="#">Back to top</a></p>
-        <img id="footer-logo" src="media/logo_Light.png" alt="Bonu assai!" height="24">
+        <img id="footer-logo" src="media/logo_Light.png" alt="Bonu assai!" height="55">
         <p class="mb-1">
-          &copy; 2026 Bonu assai! Pizza.
+          &copy; 2026 Bonu assai!.
         </p>
         <p class="mb-0">
           Let us know if you have any allergies!

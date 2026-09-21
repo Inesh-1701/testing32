@@ -5,8 +5,13 @@ function validateForm(form){
       event.stopPropagation()
     }
     else{
-      let modal = new bootstrap.Modal(document.getElementById('order-received-modal'))
+      saveCart([])
+      let modalElement = document.getElementById('order-received-modal')
+      let modal = new bootstrap.Modal(modalElement)
       modal.show()
+      modalElement.addEventListener('hidden.bs.modal', function(){
+        window.location.href = 'index.html'
+      })
     }
     form.classList.add('was-validated')
   })
@@ -15,6 +20,19 @@ function validateForm(form){
 let forms = document.querySelectorAll('.needs-validation')
 for(let form of forms){
   validateForm(form)
+}
+
+let appliedVoucher = null
+
+async function findVoucherByCode(code){
+  let response = await fetch('/voucher/list')
+  let vouchers = await response.json()
+  for(let voucher of vouchers){
+    if(voucher.code.toLowerCase() === code.toLowerCase()){
+      return voucher
+    }
+  }
+  return null
 }
 
 function displayCart(){
@@ -49,6 +67,18 @@ function displayCart(){
     list.innerHTML += itemString
   }
 
+  if(appliedVoucher){
+    total = total - appliedVoucher.value
+    list.innerHTML += `
+      <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
+        <div class="text-success">
+          <h6 class="my-0">Voucher</h6>
+          <small>${appliedVoucher.code}</small>
+        </div>
+        <span class="text-success">&minus;$${appliedVoucher.value.toFixed(2)}</span>
+      </li>`
+  }
+
   list.innerHTML += `
     <li class="list-group-item d-flex justify-content-between">
       <span>Total (USD)</span> <strong id="cart-total">$${total.toFixed(2)}</strong>
@@ -74,4 +104,20 @@ if(cartList){
     }
   })
   displayCart()
+}
+
+let voucherForm = document.getElementById('voucher-form')
+if(voucherForm){
+  voucherForm.addEventListener('submit', async function(event){
+    event.preventDefault()
+    let code = document.getElementById('voucher-input').value
+    let voucher = await findVoucherByCode(code)
+    if(voucher){
+      appliedVoucher = voucher
+      displayCart()
+    }
+    else{
+      alert('Invalid voucher code')
+    }
+  })
 }
