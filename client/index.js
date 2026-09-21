@@ -29,6 +29,7 @@ function displayPizzas(pizzaList){
 
 let pizzaList = []
 let stateList = []
+let toppingList = []
 let currentPizza = null
 let currentBoxLabel = 'Regular Box'
 
@@ -70,17 +71,64 @@ function updateModalBoxImage(){
   currentBoxLabel = boxLabel
 }
 
+function isToppingIdInList(toppingId, toppingIdList){
+  for(let id of toppingIdList){
+    if(id === toppingId){
+      return true
+    }
+  }
+  return false
+}
+
+function populateToppingChecklist(pizza){
+  let container = document.getElementById('modal-toppings-list')
+  container.innerHTML = ""
+  for(let topping of toppingList){
+    let checkedAttribute = ""
+    if(isToppingIdInList(topping.id, pizza.toppings)){
+      checkedAttribute = "checked"
+    }
+    let toppingString = `
+      <div class="col form-check">
+        <input class="form-check-input modal-topping-check" type="checkbox" id="modal-topping-${topping.id}" data-topping-id="${topping.id}" ${checkedAttribute}>
+        <label class="form-check-label" for="modal-topping-${topping.id}">${topping.name}</label>
+      </div>`
+    container.innerHTML += toppingString
+  }
+}
+
+function calculateModalPrice(){
+  let priceAdjustment = 0
+  let checkboxes = document.querySelectorAll('.modal-topping-check')
+  for(let checkbox of checkboxes){
+    let toppingId = parseInt(checkbox.dataset.toppingId)
+    let wasOriginal = isToppingIdInList(toppingId, currentPizza.toppings)
+    if(checkbox.checked && !wasOriginal){
+      priceAdjustment += 1
+    }
+    if(!checkbox.checked && wasOriginal){
+      priceAdjustment -= 1
+    }
+  }
+  return currentPizza.price + priceAdjustment
+}
+
+function updateModalPrice(){
+  document.getElementById('modal-pizza-price').textContent = calculateModalPrice().toFixed(2)
+}
+
 function openEditModal(pizza){
   currentPizza = pizza
   document.getElementById('modal-pizza-name').textContent = pizza.name
   document.getElementById('modal-pizza-image').src = pizza.imageURL
   document.getElementById('modal-pizza-image').alt = pizza.name
-  document.getElementById('modal-pizza-price').textContent = pizza.price.toFixed(2)
 
   document.getElementById('modal-xtra-cheese-check').checked = false
   document.getElementById('modal-pride-check').checked = false
   document.getElementById('modal-state-select').value = ''
   document.getElementById('modal-note').value = ''
+  populateToppingChecklist(pizza)
+  updateModalPrice()
   updateModalBoxImage()
 
   let modal = new bootstrap.Modal(document.getElementById('edit-pizza-modal'))
@@ -156,11 +204,26 @@ function addCurrentPizzaToCart(){
   cart.push({
     id: Date.now(),
     name: currentPizza.name,
-    price: currentPizza.price,
+    price: calculateModalPrice(),
     box: currentBoxLabel,
     note: document.getElementById('modal-note').value
   })
   saveCart(cart)
+}
+
+function setFulfillmentType(fulfillmentType, label){
+  localStorage.setItem('fulfillmentType', fulfillmentType)
+  document.getElementById('fulfillment-btn').textContent = label
+}
+
+function applyStoredFulfillmentType(){
+  let fulfillmentType = localStorage.getItem('fulfillmentType')
+  if(fulfillmentType === 'pickup'){
+    document.getElementById('fulfillment-btn').textContent = 'to collect it myself'
+  }
+  else{
+    document.getElementById('fulfillment-btn').textContent = 'it delivered'
+  }
 }
 
 window.addEventListener("DOMContentLoaded", async function(event){
@@ -171,6 +234,9 @@ window.addEventListener("DOMContentLoaded", async function(event){
   let stateResponse = await fetch('/state/list')
   stateList = await stateResponse.json()
   populateStateSelect()
+
+  let toppingResponse = await fetch('/topping/list')
+  toppingList = await toppingResponse.json()
 
   let row = document.getElementById('pizza-row')
   row.addEventListener('click', function(event){
@@ -196,6 +262,19 @@ window.addEventListener("DOMContentLoaded", async function(event){
   document.getElementById('modal-pride-check').addEventListener('change', updateModalBoxImage)
   document.getElementById('modal-state-select').addEventListener('change', updateModalBoxImage)
   document.getElementById('modal-add-to-cart-btn').addEventListener('click', addCurrentPizzaToCart)
+  document.getElementById('modal-toppings-list').addEventListener('change', function(event){
+    if(event.target.classList.contains('modal-topping-check')){
+      updateModalPrice()
+    }
+  })
+
+  applyStoredFulfillmentType()
+  let fulfillmentOptions = document.querySelectorAll('.fulfillment-option')
+  for(let option of fulfillmentOptions){
+    option.addEventListener('click', function(event){
+      setFulfillmentType(event.target.dataset.fulfillment, event.target.textContent)
+    })
+  }
 
   checkAdminLogin()
   document.getElementById('admin-login-btn').addEventListener('click', attemptAdminLogin)

@@ -22,6 +22,81 @@ for(let form of forms){
   validateForm(form)
 }
 
+let cityByState = {
+  Alaska: 'Anchorage',
+  Maine: 'Portland',
+  Montana: 'Billings'
+}
+
+async function populatePickupStores(){
+  let select = document.getElementById('pickup-store')
+  if(!select){
+    return;
+  }
+  let response = await fetch('/state/list')
+  let states = await response.json()
+  for(let state of states){
+    let city = cityByState[state.state]
+    if(!city){
+      city = state.state
+    }
+    let storeLabel = city + ', ' + state.state
+    let option = document.createElement('option')
+    option.value = storeLabel
+    option.textContent = storeLabel
+    select.appendChild(option)
+  }
+}
+
+function applyFulfillmentMode(){
+  let deliveryFields = document.getElementById('delivery-fields')
+  if(!deliveryFields){
+    return;
+  }
+  let paymentMethodFields = document.getElementById('payment-method-fields')
+  let pickupFields = document.getElementById('pickup-fields')
+  let addressInput = document.getElementById('address')
+  let countrySelect = document.getElementById('country')
+  let stateSelect = document.getElementById('state')
+  let zipInput = document.getElementById('zip')
+  let pickupStoreSelect = document.getElementById('pickup-store')
+  let creditRadio = document.getElementById('credit')
+  let debitRadio = document.getElementById('debit')
+  let paypalRadio = document.getElementById('paypal')
+
+  let fulfillmentType = localStorage.getItem('fulfillmentType')
+
+  if(fulfillmentType === 'pickup'){
+    deliveryFields.classList.add('d-none')
+    paymentMethodFields.classList.add('d-none')
+    pickupFields.classList.remove('d-none')
+    addressInput.required = false
+    countrySelect.required = false
+    stateSelect.required = false
+    zipInput.required = false
+    creditRadio.required = false
+    debitRadio.required = false
+    paypalRadio.required = false
+    pickupStoreSelect.required = true
+  }
+  else{
+    deliveryFields.classList.remove('d-none')
+    paymentMethodFields.classList.remove('d-none')
+    pickupFields.classList.add('d-none')
+    addressInput.required = true
+    countrySelect.required = true
+    stateSelect.required = true
+    zipInput.required = true
+    creditRadio.required = true
+    debitRadio.required = true
+    paypalRadio.required = true
+    pickupStoreSelect.required = false
+  }
+}
+
+populatePickupStores()
+applyFulfillmentMode()
+
 let appliedVoucher = null
 
 async function findVoucherByCode(code){

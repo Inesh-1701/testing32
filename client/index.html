@@ -184,7 +184,16 @@
               La felicità si pò manciari!
             </p>
             <p>
-              <a href="#" class="btn btn-primary my-2">I feel</a>
+              <span class="me-2">I would like</span>
+              <div class="dropdown d-inline-block my-2">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="fulfillment-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                  it delivered
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="fulfillment-btn">
+                  <li><button class="dropdown-item fulfillment-option" type="button" data-fulfillment="delivery">it delivered</button></li>
+                  <li><button class="dropdown-item fulfillment-option" type="button" data-fulfillment="pickup">to collect it myself</button></li>
+                </ul>
+              </div>
               <a href="checkout.html" class="btn btn-secondary my-2">View Cart</a>
             </p>
           </div>
@@ -272,6 +281,10 @@
               <label class="form-check-label" for="modal-pride-check">
                 Would you like to add a little extra to show support for your state?
               </label>
+            </div>
+            <div class="mt-3">
+              <p class="form-label mb-1">Toppings ($1 to add or remove each)</p>
+              <div class="row row-cols-2 g-1" id="modal-toppings-list"></div>
             </div>
             <div class="mt-3">
               <label for="modal-note" class="form-label">Note for this order</label>
