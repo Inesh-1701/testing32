@@ -133,6 +133,7 @@ function displayCart(){
       </li>`
   }
 
+  total = clampPrice(total)
   list.innerHTML += `
     <li class="list-group-item d-flex justify-content-between">
       <span>Total (USD)</span> <strong id="cart-total">$${total.toFixed(2)}</strong>
