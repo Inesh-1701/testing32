@@ -156,16 +156,20 @@ async function openViewModal(pizza){
 }
 
 function updateFooterLogo(){
-  let logo = document.getElementById('footer-logo')
-  if(!logo){
-    return;
-  }
   let theme = document.documentElement.getAttribute('data-bs-theme')
+  let logoSrc = 'media/logo_Light.png'
   if(theme === 'dark'){
-    logo.src = 'media/logo_Dark.png'
+    logoSrc = 'media/logo_Dark.png'
   }
-  else{
-    logo.src = 'media/logo_Light.png'
+
+  let footerLogo = document.getElementById('footer-logo')
+  if(footerLogo){
+    footerLogo.src = logoSrc
+  }
+
+  let heroLogo = document.getElementById('hero-logo')
+  if(heroLogo){
+    heroLogo.src = logoSrc
   }
 }
 
@@ -204,10 +208,10 @@ function setFulfillmentType(fulfillmentType, label){
 function applyStoredFulfillmentType(){
   let fulfillmentType = localStorage.getItem('fulfillmentType')
   if(fulfillmentType === 'pickup'){
-    document.getElementById('fulfillment-btn').textContent = 'To Collect'
+    document.getElementById('fulfillment-btn').textContent = 'Pickup'
   }
   else{
-    document.getElementById('fulfillment-btn').textContent = 'It Delivered'
+    document.getElementById('fulfillment-btn').textContent = 'Delivery'
   }
 }
 
@@ -283,10 +287,13 @@ window.addEventListener("DOMContentLoaded", async function(event){
     let modal = new bootstrap.Modal(document.getElementById('admin-login-modal'))
     modal.show()
   })
+})
 
+window.addEventListener("DOMContentLoaded", function(event){
   updateFooterLogo()
   let themeButtons = document.querySelectorAll('[data-bs-theme-value]')
   for(let button of themeButtons){
     button.addEventListener('click', updateFooterLogo)
   }
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateFooterLogo)
 })
